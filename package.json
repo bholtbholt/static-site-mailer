@@ -1,0 +1,20 @@
+{
+  "name": "static-site-mailer",
+  "version": "1.0.0",
+  "description": "A contact form mailer using Serverless for static sites",
+  "main": "index.js",
+  "scripts": {
+    "serverless": "node_modules/.bin/serverless",
+    "invoke": "node_modules/.bin/serverless invoke -f submitForm",
+    "invoke-local": "node_modules/.bin/serverless invoke local -f submitForm"
+  },
+  "author": "Brian Holt <bholtbholt@icloud.com>",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.202.0",
+    "serverless": "^1.26.0"
+  },
+  "devDependencies": {
+    "prettier": "^1.10.2"
+  }
+}
