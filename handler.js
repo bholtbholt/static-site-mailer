@@ -4,20 +4,50 @@ const AWS = require('aws-sdk');
 const SES = new AWS.SES();
 
 module.exports.submitForm = (event, context, callback) => {
-  const response = {
-    statusCode: 200,
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
+  const formData = JSON.parse(event.body);
+  const emailParams = {
+    Destination: {
+      ToAddresses: [formData.send_to],
     },
-    body: JSON.stringify({
-      message: 'Go Serverless v1.0! Your function executed successfully!',
-      input: event,
-    }),
+    Message: {
+      Body: {
+        Text: {
+          Charset: 'UTF-8',
+          Data: `${formData.message}\n\nName: ${formData.name}\nEmail: ${formData.reply_to}`,
+        },
+      },
+      Subject: {
+        Charset: 'UTF-8',
+        Data: formData.subject,
+      },
+    },
+    ReplyToAddresses: [formData.reply_to],
+    Source: formData.ses_address,
   };
 
-  callback(null, response);
+  const headers = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+  };
 
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // callback(null, { message: 'Go Serverless v1.0! Your function executed successfully!', event });
+  SES.sendEmail(emailParams, function(err, data) {
+    if (err) {
+      console.log(err);
+      callback(null, {
+        statusCode: err.statusCode,
+        headers: headers,
+        body: JSON.stringify({
+          message: err.message,
+        }),
+      });
+    } else {
+      callback(null, {
+        statusCode: 200,
+        headers: headers,
+        body: JSON.stringify({
+          message: data,
+        }),
+      });
+    }
+  });
 };
