@@ -3,9 +3,15 @@
 const AWS = require('aws-sdk');
 const SES = new AWS.SES();
 
-module.exports.submitForm = (event, context, callback) => {
-  const formData = JSON.parse(event.body);
+function validateOrigin(testOrigin) {
+  const VALID_ORIGINS = ['http://localhost:3000', 'http://jennypreswick.com'];
+  return VALID_ORIGINS.filter(origin => origin === testOrigin)[0] || VALID_ORIGINS[0];
+}
+
+function sendEmail(formData, callback) {
   const emailParams = {
+    Source: formData.ses_address,
+    ReplyToAddresses: [formData.reply_to],
     Destination: {
       ToAddresses: [formData.send_to],
     },
@@ -21,33 +27,30 @@ module.exports.submitForm = (event, context, callback) => {
         Data: formData.subject,
       },
     },
-    ReplyToAddresses: [formData.reply_to],
-    Source: formData.ses_address,
   };
 
-  const headers = {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
-  };
+  SES.sendEmail(emailParams, callback);
+}
 
-  SES.sendEmail(emailParams, function(err, data) {
-    if (err) {
-      console.log(err);
-      callback(null, {
-        statusCode: err.statusCode,
-        headers: headers,
-        body: JSON.stringify({
-          message: err.message,
-        }),
-      });
-    } else {
-      callback(null, {
-        statusCode: 200,
-        headers: headers,
-        body: JSON.stringify({
-          message: data,
-        }),
-      });
-    }
+module.exports.submitForm = (event, context, callback) => {
+  const origin = validateOrigin(event.headers.Origin || event.headers.origin);
+  const formData = JSON.parse(event.body);
+
+  // Return with no response if honeypot is present
+  if (formData.honeypot) return;
+
+  sendEmail(formData, function(err, data) {
+    const response = {
+      statusCode: err ? 500 : 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': origin,
+      },
+      body: JSON.stringify({
+        message: err ? err.message : data,
+      }),
+    };
+
+    callback(null, response);
   });
 };

@@ -26,11 +26,11 @@ provider:
 #  region: us-east-1
 
 # you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "ses:SendEmail"
+      Resource: ["*"]
 #    - Effect: "Allow"
 #      Action:
 #        - "s3:PutObject"
@@ -60,7 +60,7 @@ functions:
     events:
       - http:
           method: post
-          path: forms
+          path: static-site-mailer
           cors: true
 
 #    The following are a few example events you can configure
