@@ -4,9 +4,18 @@
   "description": "A contact form mailer using Serverless for static sites",
   "main": "index.js",
   "scripts": {
+    "deploy": "sls deploy",
+    "deploy-submit-form": "sls deploy function -f submitForm",
+    "invoke": "sls invoke -f submitForm",
+    "invoke-local": "sls invoke local -f submitForm -p ./tests/data.json",
+    "logs": "sls logs -f submitForm -t",
     "serverless": "node_modules/.bin/serverless",
-    "invoke": "node_modules/.bin/serverless invoke -f submitForm",
-    "invoke-local": "node_modules/.bin/serverless invoke local -f submitForm"
+    "sls": "node_modules/.bin/serverless",
+    "service-info": "sls info",
+    "test": "yarn test-honeypot && yarn test-ses && yarn test-send-to",
+    "test-honeypot": "sls invoke local -f submitForm -p ./tests/honeypot.json",
+    "test-ses": "sls invoke local -f submitForm -p ./tests/ses.json",
+    "test-send-to": "sls invoke local -f submitForm -p ./tests/send-to.json"
   },
   "author": "Brian Holt <bholtbholt@icloud.com>",
   "license": "MIT",
