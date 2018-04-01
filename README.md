@@ -9,12 +9,29 @@ Setup requires an AWS account and a local Node + Yarn environment.
 ## Installing This Service
 
 1. Run `yarn`
-1. Configure AWS Keys
+1. Set Up Your AWS Account
+1. Set Up AWS SES
+
+## Setting Up Your AWS Account
+
+The Serverless Framework has recorded a [video walk-through](https://www.youtube.com/watch?v=KngM5bfpttA) for setting up AWS credentials, but I've listed the steps here as well.
+
+1. Sign Up for an [AWS account](https://aws.amazon.com/s/dm/optimization/server-side-test/free-tier/free_np/) or log in if you already have one.
+1. In the AWS search bar, search for "IAM".
+1. On the IAM page, click on "Users" on the sidebar, then the "Add user" button.
+1. On the Add user page, give the user a name -- something like "serverless" is appropriate. Check "Programmatic access" under Access type then click next.
+1. On the permissions screen, click on the "Attach existing policies directly" tab, search for "AdministratorAccess" in the list, check it, and click next.
+1. On the review screen you should see your user name, with "Programmatic access", and "AdministratorAccess", then create the user.
+1. The confirmation screen shows the user "Access key ID" and "Secret access key", you'll need these to provide the Serverless Framework with access. In your CLI, type `yarn sls config credentials --provider aws --key YOUR_ACCESS_KEY_ID --secret YOUR_SECRET_ACCESS_KEY`, replacing YOUR_ACCESS_KEY_ID and YOUR_SECRET_ACCESS_KEY with the keys on the confirmation screen.
 
 ## Setting Up AWS Simple Email Service
 
-1. Sign up for a free AWS Account
-1. If you have the AWS CLI, run...
+1. Click Console Home in the top left corner.
+1. On home page, in the AWS search bar, search for "Simple Email Service".
+1. On the SES Home page, click on "Email Addresses" in the sidebar.
+1. On the Email Addresses listing page, click the "Verify a New Email Address" button.
+1. In the dialog window, type your email address then click "Verify This Email Address".
+1. You'll receive an email in moments containing a link to verify the address. Click on the link to complete the process.
 
 ## Setting Up the Form
 
@@ -111,7 +128,7 @@ sendEmail(formData, function(err, data) {
   const response = {
     headers: {
       'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': 'http://www.your-domain.com',
+      'Access-Control-Allow-Origin': 'https://www.your-domain.com',
     },
   ...
 ```
@@ -139,16 +156,12 @@ Run `yarn deploy` to deploy the entire service or `yarn deploy-submit-form` to d
 | test-ses           | Returns the reponse when the ses_address param is missing |
 | test-send-to       | Returns the response when the send_to param is missing    |
 
-# Next Steps
+# Resources
 
-* how to create a pretty url?
-* more tests
-
-# Useful Links
-
-* https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/SES.html
-* https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/SES.html#sendEmail-property
-* https://docs.aws.amazon.com/ses/latest/DeveloperGuide/control-user-access.html
-* https://medium.com/calyx/serverless-contact-forms-with-aws-lambda-79959cd1a6cd
-* https://docs.aws.amazon.com/cli/latest/reference/ses/verify-email-identity.html
-* https://serverless.com/framework/docs/providers/aws/cli-reference/info/
+* [AWS SES API](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/SES.html)
+* [AWS SES API: sendEmail](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/SES.html#sendEmail-property)
+* [AWS SES IAM Policies](https://docs.aws.amazon.com/ses/latest/DeveloperGuide/control-user-access.html)
+* [AWS verify-email-identify CLI Docs](https://docs.aws.amazon.com/cli/latest/reference/ses/verify-email-identity.html)
+* [Serverless Framework AWS CLI Docs](https://serverless.com/framework/docs/providers/aws/cli-reference/info/)
+* [Adding a Pretty URL](https://serverless.com/blog/serverless-api-gateway-domain/)
+* [Serverless Contact Forms with AWS Lambda](https://medium.com/calyx/serverless-contact-forms-with-aws-lambda-79959cd1a6cd)
