@@ -2,6 +2,8 @@
 
 A [Serverless](https://serverless.com/) service for submitting contact forms on static sites. It uses AWS Lambda in Node to send AWS Simple Email Service emails to verified addresses. **This repo can be forked to deploy your own service for use on your own static site.**
 
+For a beginner-friendly guide on setting up Serverless, AWS, and this service follow along in my [Smashing Magazine](https://www.smashingmagazine.com) article: [Building a Serverless Contact Form for your Static Site](https://www.smashingmagazine.com/2018/05/building-serverless-contact-form-static-website/).
+
 # Setup and Requirements
 
 Setup requires an AWS account and a local Node + Yarn environment.
