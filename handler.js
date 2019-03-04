@@ -3,8 +3,8 @@
 const AWS = require('aws-sdk');
 const SES = new AWS.SES();
 
-function validateOrigin(testOrigin) {
-  const VALID_ORIGINS = ['http://localhost:3000', 'http://jennypreswick.com'];
+function validOrigin(testOrigin) {
+  const VALID_ORIGINS = ['http://localhost:3000', 'https://www.jennypreswick.com', 'https://www.brianholt.ca'];
   return VALID_ORIGINS.filter(origin => origin === testOrigin)[0] || VALID_ORIGINS[0];
 }
 
@@ -33,11 +33,14 @@ function sendEmail(formData, callback) {
 }
 
 module.exports.submitForm = (event, context, callback) => {
-  const origin = validateOrigin(event.headers.Origin || event.headers.origin);
+  const origin = event.headers.Origin || event.headers.origin;
   const formData = JSON.parse(event.body);
 
   // Return with no response if honeypot is present
   if (formData.honeypot) return;
+
+  // Return with no response if the origin isn't white-listed
+  if (!validOrigin(origin)) return;
 
   sendEmail(formData, function(err, data) {
     const response = {
