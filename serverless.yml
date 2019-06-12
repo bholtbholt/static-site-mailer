@@ -19,18 +19,18 @@ service: static-site-mailer
 
 provider:
   name: aws
-  runtime: nodejs6.10
+  runtime: nodejs8.10
 
-# you can overwrite defaults here
-#  stage: dev
-#  region: us-east-1
+  # you can overwrite defaults here
+  #  stage: dev
+  #  region: us-east-1
 
-# you can add statements to the Lambda function's IAM Role here
+  # you can add statements to the Lambda function's IAM Role here
   iamRoleStatements:
-    - Effect: "Allow"
+    - Effect: 'Allow'
       Action:
-        - "ses:SendEmail"
-      Resource: ["*"]
+        - 'ses:SendEmail'
+      Resource: ['*']
 #    - Effect: "Allow"
 #      Action:
 #        - "s3:PutObject"
@@ -62,7 +62,6 @@ functions:
           method: post
           path: static-site-mailer
           cors: true
-
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details

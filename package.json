@@ -20,10 +20,10 @@
   "author": "Brian Holt <bholtbholt@icloud.com>",
   "license": "MIT",
   "dependencies": {
-    "aws-sdk": "^2.202.0",
-    "serverless": "^1.26.0"
+    "aws-sdk": "^2.474.0",
+    "serverless": "^1.45.1"
   },
   "devDependencies": {
-    "prettier": "^1.10.2"
+    "prettier": "^1.18.2"
   }
 }
